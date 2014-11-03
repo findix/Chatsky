@@ -1,32 +1,33 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-var app = angular.module('chatApp', []);
+var app = angular.module('chatApp', [
+    'btford.socket-io'
+]);
 
-app.run(function ($rootScope) {
+app.factory('socket', function (socketFactory) {
+    var socket=socketFactory();
+    socket.follow('online');
+    return socket;
 });
 
-app.controller('ChatCtrl', function ($scope, $http) {
-
+app.controller('chatCtrl', function ($scope, $http) {
     $http({
         method: 'POST',
         url: '/user'
     }).success(function (data, status) {
         $scope.username = data;
-        //setTimeout(function () {
-        //    $scope.username = 'aaaaaaaaa';
-        //}, 5000);
     }).error(function (data, status) {
     });
 });
 
-app.controller('chatListCtrl',function($scope){
-    var socket = io.connect();
+app.controller('chatListCtrl',function($scope,socket){
     var from = $scope.username;//从 $scope 中读取用户名，存于变量 from
     var to = 'all';//设置默认接收对象为"所有人"
     //发送用户上线信号
-    socket.emit('online', {'user': from});
-    socket.on('online', function (data) {
+    socket.follow('online',$scope);
+    $scope.$emit('socket:online', {'user': from});
+    $scope.$on('socket:online', function (data) {
         if ($scope.chatList == undefined) {
             $scope.chatList = [];
         }
