@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html lang="en" ng-app="chatApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html lang="en" ng-app="chatApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" ng-app="chatApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="chatApp" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Chatsky</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/chat.css">
+
+</head>
+<body ng-controller="ChatCtrl">
+
+<div id="wrap">
+    <div id="main" class="clearfix">
+        <% include public/nav %>
+        <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a
+                href="http://browsehappy.com/">upgrade
+            your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div id="container">
+            <div id="chat" class="chatPanel normalPanel">
+                <div class="content">
+                    <div id="chat_leftpanel" class="list">
+                        <div class="top">
+                            <div id="profile" class="title">
+                                <div class="myProfile">
+                                    <div class="info"><span class="nickName">{{username}}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--search-->
+                        <div class="chatListSearch">
+                            <div class="chatListSearchPanel">
+                                <div class="chatListSearchInput left">
+                                    <span class="chatListSearchIcon left"></span>
+                                    <input class="left" type="text"
+                                           name="search" value=""
+                                           keydown="preSearch"
+                                           keyup="search@.chatListSearchInput"
+                                           placeholder="搜索"
+                                           id="conv_search" ng-model="search">
+                                </div>
+                            </div>
+                        </div>
+                        <!--search end-->
+                        <div class="listContentWrap" style="position: relative; overflow-y: hidden; height: 654px;" ng-controller="chatListCtrl">
+                            <div>
+                                <div class="listContent" id="chat_conversationListContent">
+                                    <div id="conversationContainer" ng-repeat="user in users">
+                                        <div class="chatListColumn"
+                                             username="{{user}}"
+                                             id="{{user}}">
+                                            <div class="extend">
+                                            </div>
+                                            <div class="info">
+                                                <div class="nickName">
+                                                    <div class="left name">{{user}}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat lightBorder" style="visibility: visible;">
+                        <div class="chatContainer" style="height: 774px;">
+                            <div class="chatMainPanel" id="chatMainPanel">
+                                <div class="chatTitle">
+                                </div>
+                                <div class="chatScorll" style="height: 675px; overflow-y: hidden; position: relative;">
+                                    <div id="chat_chatmsglist" class="chatContent">
+                                        <div class="chatItem you" ng-repeat="chat in chatList">
+                                            <div class="chatItemContent">
+                                                <div class="cloud cloudText">
+                                                    <div class="cloudPannel">
+                                                        <div class="cloudBody">
+                                                            <div class="cloudContent">
+                                                                {{chat}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="cloudArrow "></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="scrollbarBox"
+                                         style="position: absolute; right: 0px; top: 0px; height: 100%;">
+                                        <div class="scrollbar"
+                                             style="display: none; position: absolute; right: 0px; top: 0px; opacity: 0;"></div>
+                                    </div>
+                                </div>
+                                <div id="chat_editor" class="chatOperator lightBorder" ctrl="1">
+                                    <div class="inputArea">
+                                        <textarea type="text" id="textInput" class="chatInput lightBorder"></textarea><a
+                                                href="javascript:;" class="chatSend"
+                                                click="sendMsg@.inputArea"><b>发送</b></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--change main panel end--></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- js脚本 -->
+<% include public/js %>
+</body>
+
+</html>
