@@ -18,9 +18,17 @@
             <ul class="nav navbar-nav">
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a> 欢迎您, {{username}} </a></li>
-                <li><a href='/changePasswd'>修改密码</a></li>
-                <li><a href="/logout">退出</a></li>
+                <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 欢迎您, {{username}} <span
+                                class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href='/changePasswd'>修改密码</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/logout">退出</a></li>
+                    </ul>
+                </li>
+                <li><a data-toggle="modal" href="#changeNameModal">修改昵称</a></li>
+                <li><a data-toggle="modal" href="#infoModal">关于</a></li>
             </ul>
         </div>
     </div>

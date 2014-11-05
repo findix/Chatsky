@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <!--[if lt IE 7]>
-<html lang="en" ng-app="chatApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>
-<html lang="en" ng-app="chatApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>
-<html lang="en" ng-app="chatApp" class="no-js lt-ie9"> <![endif]-->
+<html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html lang="en" ng-app="chatApp" class="no-js"> <!--<![endif]-->
+<html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="stylesheets/chat.css">
 
 </head>
-<body ng-controller="chatCtrl">
+<body ng-controller="AppCtrl">
 
 <div id="wrap">
     <div id="main" class="clearfix">
@@ -45,7 +45,7 @@
                             <div class="chatListSearchPanel">
                                 <div class="chatListSearchInput left">
                                     <span class="chatListSearchIcon left"></span>
-                                    <input class="left" type="text"
+                                    <input ng-model="query" class="left" type="text"
                                            name="search" value=""
                                            keydown="preSearch"
                                            keyup="search@.chatListSearchInput"
@@ -55,10 +55,10 @@
                             </div>
                         </div>
                         <!--search end-->
-                        <div class="listContentWrap" style="position: relative; overflow-y: hidden; height: 654px;" ng-controller="chatListCtrl">
+                        <div class="listContentWrap" style="position: relative; overflow-y: scroll; height: 654px;">
                             <div>
                                 <div class="listContent" id="chat_conversationListContent">
-                                    <div id="conversationContainer" ng-repeat="user in users">
+                                    <div id="conversationContainer" ng-repeat='user in users | filter:query'>
                                         <div class="chatListColumn"
                                              username="{{user}}"
                                              id="{{user}}">
@@ -66,11 +66,18 @@
                                             </div>
                                             <div class="info">
                                                 <div class="nickName">
-                                                    <div class="left name">{{user}}</div>
+                                                    <a ng-click="mention(user)">
+                                                        <div class="left name">{{user}}</div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="scrollbarBox"
+                                     style="position: absolute; right: 0px; top: 0px; height: 100%;">
+                                    <div class="scrollbar"
+                                         style="position: absolute; right: 0px; top: 0px; height: 587px; opacity: 0"></div>
                                 </div>
                             </div>
                         </div>
@@ -80,15 +87,30 @@
                             <div class="chatMainPanel" id="chatMainPanel">
                                 <div class="chatTitle">
                                 </div>
-                                <div class="chatScorll" style="height: 675px; overflow-y: hidden; position: relative;">
+                                <div class="chatScorll" style="height: 675px; overflow-y: scroll; position: relative;">
+                                    <!--search-->
+                                    <div class="chatListSearch">
+                                        <div class="chatListSearchPanel">
+                                            <div class="chatListSearchInput left">
+                                                <span class="chatListSearchIcon left"></span>
+                                                <input ng-model="queryChat" class="left" type="text"
+                                                       name="searchChat" value=""
+                                                       keydown="preSearch"
+                                                       keyup="search@.chatListSearchInput"
+                                                       placeholder="搜索"
+                                                       id="conv_search" ng-model="search">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div id="chat_chatmsglist" class="chatContent">
-                                        <div class="chatItem you" ng-repeat="chat in chatList">
+                                        <div class="chatItem you" ng-repeat='message in messages | filter:queryChat'
+                                             ng-class='message.me'>
                                             <div class="chatItemContent">
                                                 <div class="cloud cloudText">
                                                     <div class="cloudPannel">
                                                         <div class="cloudBody">
                                                             <div class="cloudContent">
-                                                                {{chat}}
+                                                                {{message.user}}: {{message.text}}
                                                             </div>
                                                         </div>
                                                         <div class="cloudArrow "></div>
@@ -100,14 +122,17 @@
                                     <div class="scrollbarBox"
                                          style="position: absolute; right: 0px; top: 0px; height: 100%;">
                                         <div class="scrollbar"
-                                             style="display: none; position: absolute; right: 0px; top: 0px; opacity: 0;"></div>
+                                             style="position: absolute; right: 0px; top: 0px; opacity: 0; height: 683px;"></div>
                                     </div>
                                 </div>
                                 <div id="chat_editor" class="chatOperator lightBorder" ctrl="1">
                                     <div class="inputArea">
-                                        <textarea type="text" id="textInput" class="chatInput lightBorder"></textarea><a
-                                                href="javascript:;" class="chatSend"
-                                                click="sendMsg@.inputArea"><b>发送</b></a>
+                                        <form ng-submit='sendMessage()'>
+                                            <input ng-model='message' type="text" id="textInput"
+                                                   class="chatInput lightBorder"/>
+                                            <input type='submit' class="chatSend"
+                                                   value="发送" onclick="return isNotEmpty()"/></a>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -116,10 +141,57 @@
                 </div>
             </div>
         </div>
+        <div id="changeNameModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                                    class="sr-only">Close</span></button>
+                        <h3 class="modal-title" id="myModalLabel">修改昵称</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>您现在的昵称是： {{name}}</p>
+                        <br/>
+
+                        <form class="form-inline" ng-submit="changeName()" action="">
+                            <input ng-model="newName" type="text" class="form-control"/>
+                            <input value="修改" class="btn btn-success" style="margin-left: 10px;"
+                                   type="submit"/>
+                            <button data-dismiss="modal" class="btn btn-danger" style="margin-left: 10px" href="">取消
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="infoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="infoModal"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                                    class="sr-only">Close</span></button>
+                        <h3 class="modal-title" id="myModalLabel">关于</h3>
+                    </div>
+                    <div class="modal-body">
+                        <h3>Chatsky</h3>
+
+                        <p><a target="_blank" href="https://github.com/findix/Chatsky">Github</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <!-- js脚本 -->
 <% include public/js %>
+<script>
+    var isNotEmpty = function () {
+        return $('.chatInput.lightBorder').val() != ""
+    }
+</script>
 </body>
 
 </html>

@@ -24,7 +24,6 @@ app.use(session(
   resave: 'true'
   saveUninitialized: "true"
 ))
-app.use require("less-middleware")(path.join(__dirname, "public"))
 app.use express.static(path.join(__dirname, "public"))
 app.use "/", route
 
