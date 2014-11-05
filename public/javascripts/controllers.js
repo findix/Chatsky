@@ -19,7 +19,7 @@ function AppCtrl($scope, $http, socket) {
         var mention, me;
         mention = getMention(message.text);
         if (mention) {
-            me = "active"
+            me = "active";
         } else {
             me = null;
         }
@@ -50,7 +50,7 @@ function AppCtrl($scope, $http, socket) {
             text: '用户 ' + data.name + ' 已经下线'
         });
         var i, user;
-        for (i = 0; i < $scope.users.length; i++) {
+        for (i = 0; i < $scope.users.length; i += 1) {
             user = $scope.users[i];
             if (user === data.name) {
                 $scope.users.splice(i, 1);
@@ -59,8 +59,9 @@ function AppCtrl($scope, $http, socket) {
         }
     });
 
+    // Setup Methods
     $(function () {
-    //    $('#changeNameModal').modal('show')
+        //$('#changeNameModal').modal('show')
     });
 
     // Private helpers
@@ -123,10 +124,10 @@ function AppCtrl($scope, $http, socket) {
                 $scope.users[i] = newName;
             }
         }
-
-        localStorage.setItem("username", newName);
+        if (oldName === $scope.name) {
+            localStorage.setItem("username", newName);
+        }
         current_username = newName;
-
         $scope.messages.push({
             user: '管理员',
             text: '用户 ' + oldName + ' 改名为 ' + newName + '。'
@@ -141,8 +142,6 @@ function AppCtrl($scope, $http, socket) {
                 $scope.users[i] = newName;
             }
         }
-
-        localStorage.setItem("username", newName);
         current_username = newName;
     };
 
@@ -186,6 +185,9 @@ function AppCtrl($scope, $http, socket) {
 
         // clear message box
         $scope.message = '';
+
+        // scroll to the bottom
+        $('.chatScroll').animate({scrollTop: $('#chat_chatmsglist').height()}, 1000);
     };
 
     $http({

@@ -23,20 +23,20 @@
 <div id="wrap">
     <div id="main" class="clearfix">
         <% include public/nav %>
-        <!--[if lt IE 7]>
-        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a
+        <!--[if lt IE 9]>
+        <h2 class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a
                 href="http://browsehappy.com/">upgrade
-            your browser</a> to improve your experience.</p>
+            your browser</a> to improve your experience.</h2>
         <![endif]-->
 
         <div id="container">
             <div id="chat" class="chatPanel normalPanel">
-                <div class="content">
+                <div class="content" style="margin-top: -30px">
                     <div id="chat_leftpanel" class="list">
                         <div class="top">
                             <div id="profile" class="title">
                                 <div class="myProfile">
-                                    <div class="info"><span class="nickName">{{username}}</span></div>
+                                    <div class="info"><span class="nickName"></span></div>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                             </div>
                         </div>
                         <!--search end-->
-                        <div class="listContentWrap" style="position: relative; overflow-y: scroll; height: 654px;">
+                        <div class="listContentWrap" style="position: relative; overflow-y: scroll; height: 451px;">
                             <div>
                                 <div class="listContent" id="chat_conversationListContent">
                                     <div id="conversationContainer" ng-repeat='user in users | filter:query'>
@@ -77,17 +77,17 @@
                                 <div class="scrollbarBox"
                                      style="position: absolute; right: 0px; top: 0px; height: 100%;">
                                     <div class="scrollbar"
-                                         style="position: absolute; right: 0px; top: 0px; height: 587px; opacity: 0"></div>
+                                         style="position: absolute; right: 0px; top: 0px; height: 353px; opacity: 0"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="chat lightBorder" style="visibility: visible;">
-                        <div class="chatContainer" style="height: 774px;">
+                        <div class="chatContainer" style="height: 571px;">
                             <div class="chatMainPanel" id="chatMainPanel">
                                 <div class="chatTitle">
                                 </div>
-                                <div class="chatScorll" style="height: 675px; overflow-y: scroll; position: relative;">
+                                <div class="chatScroll" style="height: 472px; overflow-y: scroll; position: relative;">
                                     <!--search-->
                                     <div class="chatListSearch">
                                         <div class="chatListSearchPanel">
@@ -103,8 +103,8 @@
                                         </div>
                                     </div>
                                     <div id="chat_chatmsglist" class="chatContent">
-                                        <div class="chatItem you" ng-repeat='message in messages | filter:queryChat'
-                                             ng-class='message.me'>
+                                        <div class="chatItem" ng-repeat='message in messages | filter:queryChat'
+                                             ng-class="{'me':message.user==name, 'you': message.user!=name, 'active':message.me=='active'}">
                                             <div class="chatItemContent">
                                                 <div class="cloud cloudText">
                                                     <div class="cloudPannel">
@@ -122,7 +122,7 @@
                                     <div class="scrollbarBox"
                                          style="position: absolute; right: 0px; top: 0px; height: 100%;">
                                         <div class="scrollbar"
-                                             style="position: absolute; right: 0px; top: 0px; opacity: 0; height: 683px;"></div>
+                                             style="position: absolute; right: 0px; top: 0px; opacity: 0;"></div>
                                     </div>
                                 </div>
                                 <div id="chat_editor" class="chatOperator lightBorder" ctrl="1">
@@ -172,12 +172,31 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                                     class="sr-only">Close</span></button>
-                        <h3 class="modal-title" id="myModalLabel">关于</h3>
+                        <h3 class="modal-title" id="myModalLabel">关于 Chatsky</h3>
                     </div>
                     <div class="modal-body">
-                        <h3>Chatsky</h3>
+                        <h3>Chatsky, 一个开源在线聊天平台</h3>
 
-                        <p><a target="_blank" href="https://github.com/findix/Chatsky">Github</a>
+                        <p>Copyright © 2014 FindiX Studio All Right Reserved.</p>
+
+                        <p>
+                            Developed by <a href="http://www.find1x.com/">FindiX寻未工作室</a>, Licensed under the <a
+                                    href="https://github.com/findix/WTFPL">WTFPL</a>, Version
+                            2.
+                        </p>
+
+                        <p>
+                            Powered By <a href="http://www.bootcss.com/" target="_blank"
+                                          title="Bootstrap中文网">Bootstrap</a> | <a
+                                    href="http://nodejs.org/"
+                                    target="_blank" title="Node.js"> Node.js </a> | <a
+                                    href="https://www.mongodb.org/‎" target="_blank" title="MongoDB">MongoDB</a>
+                            | <a href="http://expressjs.com/" target="_blank" title="Express">Express</a> |
+                            <a href="https://angularjs.org/" target="_blank" title="AngularJs">AngularJs</a>
+                            <a target="_blank" title="socket.io" href="http://socket.io/">Socket.IO</a>
+                        </p>
+
+                        <p>This Project is Open Source On <a target="_blank" href="https://github.com/findix/Chatsky">Github</a>
                         </p>
                     </div>
                 </div>
@@ -186,7 +205,23 @@
     </div>
 </div>
 <!-- js脚本 -->
-<% include public/js %>
+<script src="javascripts/lib/jquery-1.11.1.min.js"></script>
+<script src="javascripts/lib/bootstrap.min.js"></script>
+<script src="javascripts/lib/coffee-script.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-socket-io/socket.js"></script>
+<script src='javascripts/app.js'></script>
+<script src='javascripts/services.js'></script>
+<script src='javascripts/controllers.js'></script>
+<script src='javascripts/filters.js'></script>
+<script src='javascripts/directives.js'></script>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    var socket = io();
+</script>
 <script>
     var isNotEmpty = function () {
         return $('.chatInput.lightBorder').val() != ""

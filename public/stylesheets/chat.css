@@ -238,16 +238,16 @@ a:active {
     background: #F5F5F5;
 }
 /*自定义滚动条*/
-.chatPanel .chatScorll::-webkit-scrollbar {
+.chatPanel .chatScroll::-webkit-scrollbar {
     width: 8px;
     height: 12px;
     -webkit-border-radius: 12px;
 }
-.chatPanel .chatScorll::-webkit-scrollbar-thumb {
+.chatPanel .chatScroll::-webkit-scrollbar-thumb {
     background: #6B747A;
     -webkit-border-radius: 12px;
 }
-.chatPanel .chatScorll::-webkit-scrollbar-track {
+.chatPanel .chatScroll::-webkit-scrollbar-track {
     background: #fff;
 }
 .chatPanel .listContentWrap::-webkit-scrollbar {
@@ -1392,7 +1392,7 @@ a.btnSecondary:active {
     text-shadow: none;
 }
 /*会话内容窗体*/
-.chatPanel .chatScorll {
+.chatPanel .chatScroll {
     height: 390px;
     width: 100%;
     min-height: 200px;
@@ -5378,7 +5378,7 @@ a.btnBlue:active .btnBluePanel {
     top: 10px;
     width: 17px;
     height: 24px;
-    background: url(../images/cloud/filetype_guid_right1db6f8.png) no-repeat;
+    background: url(../images/filetype_guid_right1db6f8.png) no-repeat;
     right: -12px\9;
 }
 .you .cloudBody {
@@ -5506,7 +5506,7 @@ a.btnBlue:active .btnBluePanel {
     top: 10px;
     width: 13px;
     height: 24px;
-    background: url(../images/cloud/bubble_openapi1d20a9.png) no-repeat;
+    background: url(../images/bubble_openapi1d20a9.png) no-repeat;
 }
 .you .chatItemContent .cloudMesgLink .cloudBody,
 .you .chatItemContent .cloudMesgFile .cloudBody {
@@ -5555,7 +5555,7 @@ a.btnBlue:active .btnBluePanel {
     height: 25px;
     right: -14px;
     top: 8px;
-    background: url(../images/cloud/filetype_guid_left1db6f8.png) no-repeat 0 0;
+    background: url(../images/filetype_guid_left1db6f8.png) no-repeat 0 0;
 }
 .me .cloudBody {
     border: 1px solid #7AA23F;
@@ -5608,7 +5608,7 @@ a.btnBlue:active .btnBluePanel {
     top: 11px;
     width: 13px;
     height: 24px;
-    background: url(../images/cloud/bubble_green_guid1dbc1c.png) no-repeat;
+    background: url(../images/bubble_green_guid1dbc1c.png) no-repeat;
 }
 .me .cloudText .cloudContent {
     vertical-align: top;
@@ -5630,7 +5630,7 @@ a.btnBlue:active .btnBluePanel {
     height: 24px;
     position: absolute;
     right: -17px;
-    background: url(../images/cloud/bubble_green_guid1dbc1c.png) no-repeat;
+    background: url(../images/bubble_green_guid1dbc1c.png) no-repeat;
 }
 .me .cloudVoice {
     margin-right: 10px;
@@ -5658,7 +5658,7 @@ a.btnBlue:active .btnBluePanel {
     right: -9px;
     right: -10px\9;
     top: 11px;
-    background: url(../images/cloud/bubble_green_guid1dbc1c.png) no-repeat 0 0;
+    background: url(../images/bubble_green_guid1dbc1c.png) no-repeat 0 0;
 }
 .me .cloudVoice .icoVoice {
     display: inline-block;
@@ -5706,7 +5706,7 @@ a.btnBlue:active .btnBluePanel {
     height: 25px;
     right: -17px;
     top: 8px;
-    background: url(../images/cloud/bubble_green_guid1dbc1c.png) no-repeat 0 0;
+    background: url(../images/bubble_green_guid1dbc1c.png) no-repeat 0 0;
 }
 .me .cloudVideo .imageBorder {
     border: 1px solid #a4a4a4\9;
@@ -5729,7 +5729,7 @@ a.btnBlue:active .btnBluePanel {
     top: 10px;
     width: 17px;
     height: 24px;
-    background: url(../images/cloud/bubble_green_guid1dbc1c.png) no-repeat;
+    background: url(../images/bubble_green_guid1dbc1c.png) no-repeat;
 }
 .me .cloudMesgWord .cloudContent {
     border-radius: 5px;
