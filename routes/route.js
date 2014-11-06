@@ -10,7 +10,7 @@
 
   user = mongoose.model('User');
 
-  needLogin = true;
+  needLogin = false;
 
   router.get("/", function(req, res) {
     if (!needLogin) {

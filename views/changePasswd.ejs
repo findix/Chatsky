@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" ng-app="myApp">
 <head>
     <title>Chatsky</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/main.css">
 </head>
-<body>
+<body ng-controller="AppCtrl">
 <div id="wrap">
     <div id="main" class="clearfix">
         <% include public/nav %>
@@ -66,7 +66,10 @@
 </div>
 <!-- 页脚版权信息 -->
 <% include public/footer %>
+
 <!-- js脚本 -->
-<% include public/js %>
+<script src="javascripts/lib/jquery-1.11.1.min.js"></script>
+<script src="javascripts/lib/bootstrap.min.js"></script>
+<script src="javascripts/lib/coffee-script.js"></script>
 </body>
 </html>

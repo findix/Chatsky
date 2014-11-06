@@ -5,7 +5,7 @@ router = express.Router()
 user = mongoose.model('User')
 
 # setting whether need login
-needLogin = true
+needLogin = false
 
 # GET home page.
 router.get "/", (req, res) ->
