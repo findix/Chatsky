@@ -1,297 +1,128 @@
-# angular-seed — the seed for AngularJS apps
+# 在线聊天室Chatsky —— Node.js + Angular.js + Socket.io
 
-This project is an application skeleton for a typical [AngularJS](http://angularjs.org/) web app.
-You can use it to quickly bootstrap your angular webapp projects and dev environment for these
-projects.
+Web2.0大作业项目，一通宵写的外加后面几天抽空修修补补，css直接无耻的用了微信网页版（企鹅蜀黍不要吊打我），借鉴并使用了网上的一些样例代码，在此一并说明。项目以及doc目录里有文档，内容比较恶心大作业稳定嘛你懂的，源码和文档全部授权做任何使用包括但不限于交作业（特别是要求用 Angular.js 和 Socket.io 写个 Single Page Application 这种奇怪的神奇要求……）
+> 开发环境：
+系统：Windows 8.1 Update
+服务器环境：nodejs 0.10.29
+服务器包管理器：npm
+前端js包管理器：bower
+服务器语言：CoffeeScript
+MVC框架：Express 4
+数据库：MongoDB
+ORM框架：Mongoose
+模板引擎：ejs
+Web Socket实现解决方案：Socket.io
+单元测试框架：Karma
+前端页面语言：HTML5
+层叠样式表语言：CSS3、LESS
+页面脚本语言：Javascript、CoffeeScript
+页面开源框架：Angular.js, jquary, Bootstrap
+版本控制软件：Git
+版本控制服务：Github
+数据库托管平台：Mongohq
+IDE：JetBrain Webstorm
 
-The seed contains a sample AngularJS application and is preconfigured to install the Angular
-framework and a bunch of development and testing tools for instant web development gratification.
+## 简介
+本项目作为即时聊天平台，是一个典型的Web App，作为Single-page Application展示可以获得较好的效果。
+网页即时通讯主要需要解决的问题是长连接、动态数据绑定以及大量并发访问。
+本项目拟使用WebSocket的一个实现Socket.IO以及AngularJS库解决这两大问题，通过这两个工具的搭配使用，可以较好满足SPA6大特点。
+Node.js作为单线程异步实现，搭配V8引擎JIT编译的高效，在1000并发条件下满足系统稳定运行是可行的。
 
-The seed app doesn't do much, just shows how to wire two controllers and views together.
+## ab测试
 
+### 测试环境
+网络环境：
+内网
 
-## Getting Started
+压力测试服务器：
+服务器系统：Linux Ubuntu 14.04(Vmware虚拟机)
+服务器配置：Intel(R) Core(TM) CPU i5 2430M 2.40GHz 2 CORES
 
-To get you started you can simply clone the angular-seed repository and install the dependencies:
+内存：4GB
+发包服务器：
+发包工具：apache 2.2.19自带的ab测试工具
 
-### Prerequisites
+服务器系统：Windows(R) 8.1 简体中文企业版 64bit 
 
-You need git to clone the angular-seed repository. You can get git from
-[http://git-scm.com/](http://git-scm.com/).
+服务器配置：Intel(R) Core(TM) CPU i5 2430M 2.40GHz 4 CORES
+内存：8GB
 
-We also use a number of node.js tools to initialize and test angular-seed. You must have node.js and
-its package manager (npm) installed.  You can get them from [http://nodejs.org/](http://nodejs.org/).
+### 参数
+url: /
+并发：1000
+次数：10
 
-### Clone angular-seed
+### 结果
+	This is ApacheBench, Version 2.3 <$Revision: 655654 $>
+	Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+	Licensed to The Apache Software Foundation, http://www.apache.org/
+	
+	Benchmarking localhost (be patient)
+	
+	
+	Server Software:
+	Server Hostname:localhost
+	Server Port:80
+	
+	Document Path:  /
+	Document Length:4017 bytes
+	
+	Concurrency Level:  1000
+	/* 整个测试持续的时间 */
+	Time taken for tests:   36.869 seconds
+	/* 完成的请求数量 */
+	Complete requests:  10000
+	/* 失败的请求数量 */
+	Failed requests:0
+	Write errors:   0
+	/* 整个场景中的网络传输量 */
+	Total transferred:  43235848 bytes
+	HTML transferred:   40170000 bytes
+	/* 每秒事务数 ，mean 表示这是一个平均值 */
+	Requests per second:271.23 [#/sec] (mean)
+	/* 平均事务响应时间 ，mean 表示这是一个平均值 */
+	Time per request:   3686.857 [ms] (mean)
+	Time per request:   3.687 [ms] (mean, across all concurrent requests)
+	/* 平均每秒网络上的流量，可以帮助排除是否存在网络流量过大导致响应时间延长的问题 */
+	Transfer rate:  1145.22 [Kbytes/sec] received
+	
+	/* 网络上消耗的时间的分解 */
+	Connection Times (ms)
+	  min  mean[+/-sd] median   max
+	Connect:00  10.0  0 508
+	Processing:   188 3570 649.5   37324442
+	Waiting:   12  155 447.6 182287
+	Total:188 3570 649.6   37324442
+	
+	/* 整个场景中所有请求的响应情况。在场景中每个请求都有一个响应时间，其中 50 ％ 的用户响应时间小于 3732 毫秒， 66 ％ 的用户响应时间小于 3094 毫秒，最大的响应时间小于 4442 毫秒 */
+	Percentage of the requests served within a certain time (ms)
+	  50%   3732
+	  66%   3782
+	  75%   3816
+	  80%   3830
+	  90%   3926
+	  95%   4069
+	  98%   4105
+	  99%   4125
+	 100%   4442 (longest request)
 
-Clone the angular-seed repository using [git][git]:
+### 结论
 
+本测试在36.869s内完成了10次1000并发测试，所有响应均全部完成，没有失败请求。其中50%请求在3.7s内完成，最长请求时间为4.4s，考虑到服务器性能以及环境，该结果被认为是可以接受的，所以我们可以认为本系统在1000并发情况下是可用的。
+
+# LICENCE
 ```
-git clone https://github.com/angular/angular-seed.git
-cd angular-seed
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+                    Version 2, December 2004
+
+ Copyright (C) 2014 Sean Fung <fengxiang220@gmail.com>
+
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  0. You just DO WHAT THE FUCK YOU WANT TO.
 ```
-
-If you just want to start a new project without the angular-seed commit history then you can do:
-
-```bash
-git clone --depth=1 https://github.com/angular/angular-seed.git <your-project-name>
-```
-
-The `depth=1` tells git to only pull down one commit worth of historical data.
-
-### Install Dependencies
-
-We have two kinds of dependencies in this project: tools and angular framework code.  The tools help
-us manage and test the application.
-
-* We get the tools we depend upon via `npm`, the [node package manager][npm].
-* We get the angular code via `bower`, a [client-side code package manager][bower].
-
-We have preconfigured `npm` to automatically run `bower` so we can simply do:
-
-```
-npm install
-```
-
-Behind the scenes this will also call `bower install`.  You should find that you have two new
-folders in your project.
-
-* `node_modules` - contains the npm packages for the tools we need
-* `app/bower_components` - contains the angular framework files
-
-*Note that the `bower_components` folder would normally be installed in the root folder but
-angular-seed changes this location through the `.bowerrc` file.  Putting it in the app folder makes
-it easier to serve the files by a webserver.*
-
-### Run the Application
-
-We have preconfigured the project with a simple development web server.  The simplest way to start
-this server is:
-
-```
-npm start
-```
-
-Now browse to the app at `http://localhost:8000/app/index.html`.
-
-
-
-## Directory Layout
-
-```
-app/                    --> all of the source files for the application
-  app.css               --> default stylesheet
-  components/           --> all app specific modules
-    version/              --> version related components
-      version.js                 --> version module declaration and basic "version" value service
-      version_test.js            --> "version" value service tests
-      version-directive.js       --> custom directive that returns the current app version
-      version-directive_test.js  --> version directive tests
-      interpolate-filter.js      --> custom interpolation filter
-      interpolate-filter_test.js --> interpolate filter tests
-  view1/                --> the view1 view template and logic
-    view1.html            --> the partial template
-    view1.js              --> the controller logic
-    view1_test.js         --> tests of the controller
-  view2/                --> the view2 view template and logic
-    view2.html            --> the partial template
-    view2.js              --> the controller logic
-    view2_test.js         --> tests of the controller
-  socket.js                --> main application module
-  index.html            --> app layout file (the main html template file of the app)
-  index-async.html      --> just like index.html, but loads js files asynchronously
-karma.conf.js         --> config file for running unit tests with Karma
-e2e-tests/            --> end-to-end tests
-  protractor-conf.js    --> Protractor config file
-  scenarios.js          --> end-to-end scenarios to be run by Protractor
-```
-
-## Testing
-
-There are two kinds of tests in the angular-seed application: Unit tests and End to End tests.
-
-### Running Unit Tests
-
-The angular-seed app comes preconfigured with unit tests. These are written in
-[Jasmine][jasmine], which we run with the [Karma Test Runner][karma]. We provide a Karma
-configuration file to run them.
-
-* the configuration is found at `karma.conf.js`
-* the unit tests are found next to the code they are testing and are named as `..._test.js`.
-
-The easiest way to run the unit tests is to use the supplied npm script:
-
-```
-npm test
-```
-
-This script will start the Karma test runner to execute the unit tests. Moreover, Karma will sit and
-watch the source and test files for changes and then re-run the tests whenever any of them change.
-This is the recommended strategy; if your unit tests are being run every time you save a file then
-you receive instant feedback on any changes that break the expected code functionality.
-
-You can also ask Karma to do a single run of the tests and then exit.  This is useful if you want to
-check that a particular version of the code is operating as expected.  The project contains a
-predefined script to do this:
-
-```
-npm run test-single-run
-```
-
-
-### End to end testing
-
-The angular-seed app comes with end-to-end tests, again written in [Jasmine][jasmine]. These tests
-are run with the [Protractor][protractor] End-to-End test runner.  It uses native events and has
-special features for Angular applications.
-
-* the configuration is found at `e2e-tests/protractor-conf.js`
-* the end-to-end tests are found in `e2e-tests/scenarios.js`
-
-Protractor simulates interaction with our web app and verifies that the application responds
-correctly. Therefore, our web server needs to be serving up the application, so that Protractor
-can interact with it.
-
-```
-npm start
-```
-
-In addition, since Protractor is built upon WebDriver we need to install this.  The angular-seed
-project comes with a predefined script to do this:
-
-```
-npm run update-webdriver
-```
-
-This will download and install the latest version of the stand-alone WebDriver tool.
-
-Once you have ensured that the development web server hosting our application is up and running
-and WebDriver is updated, you can run the end-to-end tests using the supplied npm script:
-
-```
-npm run protractor
-```
-
-This script will execute the end-to-end tests against the application being hosted on the
-development server.
-
-
-## Updating Angular
-
-Previously we recommended that you merge in changes to angular-seed into your own fork of the project.
-Now that the angular framework library code and tools are acquired through package managers (npm and
-bower) you can use these tools instead to update the dependencies.
-
-You can update the tool dependencies by running:
-
-```
-npm update
-```
-
-This will find the latest versions that match the version ranges specified in the `package.json` file.
-
-You can update the Angular dependencies by running:
-
-```
-bower update
-```
-
-This will find the latest versions that match the version ranges specified in the `bower.json` file.
-
-
-## Loading Angular Asynchronously
-
-The angular-seed project supports loading the framework and application scripts asynchronously.  The
-special `index-async.html` is designed to support this style of loading.  For it to work you must
-inject a piece of Angular JavaScript into the HTML page.  The project has a predefined script to help
-do this.
-
-```
-npm run update-index-async
-```
-
-This will copy the contents of the `angular-loader.js` library file into the `index-async.html` page.
-You can run this every time you update the version of Angular that you are using.
-
-
-## Serving the Application Files
-
-While angular is client-side-only technology and it's possible to create angular webapps that
-don't require a backend server at all, we recommend serving the project files using a local
-webserver during development to avoid issues with security restrictions (sandbox) in browsers. The
-sandbox implementation varies between browsers, but quite often prevents things like cookies, xhr,
-etc to function properly when an html page is opened via `file://` scheme instead of `http://`.
-
-
-### Running the App during Development
-
-The angular-seed project comes preconfigured with a local development webserver.  It is a node.js
-tool called [http-server][http-server].  You can start this webserver with `npm start` but you may choose to
-install the tool globally:
-
-```
-sudo npm install -g http-server
-```
-
-Then you can start your own development web server to serve static files from a folder by
-running:
-
-```
-http-server -a localhost -p 8000
-```
-
-Alternatively, you can choose to configure your own webserver, such as apache or nginx. Just
-configure your server to serve the files under the `app/` directory.
-
-
-### Running the App in Production
-
-This really depends on how complex your app is and the overall infrastructure of your system, but
-the general rule is that all you need in production are all the files under the `app/` directory.
-Everything else should be omitted.
-
-Angular apps are really just a bunch of static html, css and js files that just need to be hosted
-somewhere they can be accessed by browsers.
-
-If your Angular app is talking to the backend server via xhr or other means, you need to figure
-out what is the best way to host the static files to comply with the same origin policy if
-applicable. Usually this is done by hosting the files by the backend server or through
-reverse-proxying the backend server(s) and webserver(s).
-
-
-## Continuous Integration
-
-### Travis CI
-
-[Travis CI][travis] is a continuous integration service, which can monitor GitHub for new commits
-to your repository and execute scripts such as building the app or running tests. The angular-seed
-project contains a Travis configuration file, `.travis.yml`, which will cause Travis to run your
-tests when you push to GitHub.
-
-You will need to enable the integration between Travis and GitHub. See the Travis website for more
-instruction on how to do this.
-
-### CloudBees
-
-CloudBees have provided a CI/deployment setup:
-
-<a href="https://grandcentral.cloudbees.com/?CB_clickstart=https://raw.github.com/CloudBees-community/angular-js-clickstart/master/clickstart.json">
-<img src="https://d3ko533tu1ozfq.cloudfront.net/clickstart/deployInstantly.png"/></a>
-
-If you run this, you will get a cloned version of this repo to start working on in a private git repo,
-along with a CI service (in Jenkins) hosted that will run unit and end to end tests in both Firefox and Chrome.
-
-
-## Contact
-
-For more information on AngularJS please check out http://angularjs.org/
-
-[git]: http://git-scm.com/
-[bower]: http://bower.io
-[npm]: https://www.npmjs.org/
-[node]: http://nodejs.org
-[protractor]: https://github.com/angular/protractor
-[jasmine]: http://jasmine.github.io
-[karma]: http://karma-runner.github.io
-[travis]: https://travis-ci.org/
-[http-server]: https://github.com/nodeapps/http-server
